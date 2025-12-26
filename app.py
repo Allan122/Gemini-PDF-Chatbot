@@ -34,9 +34,15 @@ def get_text_chunks(text):
     return chunks
 
 def get_vector_store(text_chunks):
-    # Using the standard embedding model (Safe for 2025)
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
-    
+    # Use the safe alias for embeddings too if possible, or stick to 004
+    try:
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
+        # Test it with one chunk to fail fast if blocked
+        vector_store = FAISS.from_texts(text_chunks[:1], embedding=embeddings)
+    except:
+        # Fallback to the oldest, most open model
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+
     vector_store = None
     batch_size = 5 
     
@@ -85,19 +91,23 @@ def get_conversational_chain():
     Answer:
     """
     
-    # 🛠️ FIXED: Using the model confirmed in your list
-    model = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.3)
+    # 🛠️ FIXED: Using 'gemini-flash-latest' which was EXPLICITLY in your available list
+    model = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0.3)
     
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
     chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
     return chain
 
 def user_input(user_question):
+    # Match the embedding logic
     try:
         embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
         new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
-        
-        # Retry loop for searches
+    except:
+        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+        new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+    
+    try:
         docs = None
         retries = 3
         for attempt in range(retries):
