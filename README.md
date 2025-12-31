@@ -7,8 +7,15 @@
 
 A powerful **RAG (Retrieval-Augmented Generation)** application that allows users to chat with their PDF documents using Google's latest **Gemini 2.5 Flash** model.
 
+## 📄 Data Source
+This application is designed to process **Dynamic User Input**.
+* **Input:** Any PDF document uploaded by the user (e.g., Resumes, Research Papers, Legal Contracts).
+* **Processing:** The app uses **LangChain** to split the text into chunks and **Google Gemini** to generate embeddings for retrieval.
+* **No Pre-training:** The model does not rely on a static dataset; it uses RAG (Retrieval-Augmented Generation) to answer questions based strictly on the uploaded document.
+
 ## 📸 Demo
-*(Upload a screenshot of the app answering a question here)*
+<img width="1912" height="1079" alt="Screenshot 2025-12-26 142917" src="https://github.com/user-attachments/assets/0d2f64aa-cc56-40c6-9424-a6ed7197e7e6" />
+
 
 ## 🚀 Key Features
 * **🧠 Advanced RAG Architecture:** Uses FAISS vector store to retrieve exact context from documents.
