@@ -41,4 +41,4 @@ A powerful **RAG (Retrieval-Augmented Generation)** application that allows user
     ```
 
 ---
-*Created by Allan Cheerakunnil Alex - Data Analyst Portfolio*
+*Allan Cheerakunnil Alex - Data Analyst Portfolio*
